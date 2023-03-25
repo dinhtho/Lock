@@ -19,13 +19,10 @@ class MainActivity : Activity() {
         }
 
         val wifiManager = applicationContext.getSystemService(WIFI_SERVICE) as WifiManager
-        val wifiEnabled = wifiManager.isWifiEnabled
-        wifiManager.isWifiEnabled = wifiEnabled.not()
-        Toast.makeText(this, if (wifiEnabled.not()) "wifi on" else "wifi off", Toast.LENGTH_SHORT)
-            .show()
-        if (wifiEnabled) {
-            lock()
-        }
+        wifiManager.isWifiEnabled = false
+        Toast.makeText(this, "wifi off", Toast.LENGTH_SHORT).show()
+
+        lock()
         finish()
     }
 

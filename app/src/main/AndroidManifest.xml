@@ -36,6 +36,12 @@
                 android:resource= "@xml/policies" />
         </receiver>
 
+        <receiver android:name=".PhoneStateBroadcastReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.USER_PRESENT" />
+            </intent-filter>
+        </receiver>
+
     </application>
 
 </manifest>
