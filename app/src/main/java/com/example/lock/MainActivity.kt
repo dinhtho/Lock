@@ -6,6 +6,8 @@ import android.content.ComponentName
 import android.content.Intent
 import android.net.wifi.WifiManager
 import android.os.Bundle
+import android.os.PowerManager
+import android.os.SystemClock
 import android.widget.Toast
 
 
@@ -13,16 +15,16 @@ class MainActivity : Activity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (checkIsAdmin().not()) {
-            finish()
-            return
-        }
+//        if (checkIsAdmin().not()) {
+//            finish()
+//            return
+//        }
 
         val wifiManager = applicationContext.getSystemService(WIFI_SERVICE) as WifiManager
         wifiManager.isWifiEnabled = false
         Toast.makeText(this, "wifi off", Toast.LENGTH_SHORT).show()
 
-        lock()
+//        lock()
         finish()
     }
 
