@@ -1,53 +1,45 @@
 package com.example.lock
 
 import android.app.Activity
-import android.app.admin.DevicePolicyManager
-import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
 import android.net.wifi.WifiManager
 import android.os.Bundle
-import android.os.PowerManager
-import android.os.SystemClock
+import android.provider.Settings
+import android.view.accessibility.AccessibilityEvent
+import android.view.accessibility.AccessibilityManager
 import android.widget.Toast
+
+const val LOCK_SCREEN = "LOCK_SCREEN"
 
 
 class MainActivity : Activity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        if (checkIsAdmin().not()) {
-//            finish()
-//            return
-//        }
 
         val wifiManager = applicationContext.getSystemService(WIFI_SERVICE) as WifiManager
         wifiManager.isWifiEnabled = false
         Toast.makeText(this, "wifi off", Toast.LENGTH_SHORT).show()
 
-//        lock()
+        lock()
         finish()
     }
 
     private fun lock() {
-        val deviceManger = getSystemService(DEVICE_POLICY_SERVICE) as DevicePolicyManager
-        deviceManger.lockNow()
-    }
-
-    private fun checkIsAdmin(): Boolean {
-        val deviceManger = getSystemService(DEVICE_POLICY_SERVICE) as DevicePolicyManager
-        val compName = ComponentName(this, DeviceAdmin::class.java)
-        val admin = deviceManger.isAdminActive(compName)
-        if (admin.not()) {
-            val intent = Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN)
-            intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, compName)
-            intent.putExtra(
-                DevicePolicyManager.EXTRA_ADD_EXPLANATION,
-                "If you only activate, this app can perform screen off !!!"
-            )
-            startActivityForResult(intent, 100)
-            return false
+        val event = AccessibilityEvent.obtain(AccessibilityEvent.TYPE_VIEW_TEXT_SELECTION_CHANGED)
+        val manager =
+            applicationContext.getSystemService(Context.ACCESSIBILITY_SERVICE) as AccessibilityManager
+        if (manager.isEnabled) {
+            event.packageName = applicationContext.packageName
+            event.className = this.javaClass.name
+            event.isEnabled = true
+            event.text.add(LOCK_SCREEN)
+            manager.sendAccessibilityEvent(event)
+        } else {
+            val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
+            startActivity(intent)
         }
-        return true
     }
 
 }
