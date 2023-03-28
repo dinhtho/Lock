@@ -20,14 +20,13 @@ class MainActivity : Activity() {
 
         val wifiManager = applicationContext.getSystemService(WIFI_SERVICE) as WifiManager
         wifiManager.isWifiEnabled = false
-        Toast.makeText(this, "wifi off", Toast.LENGTH_SHORT).show()
 
         lock()
         finish()
     }
 
     private fun lock() {
-        val event = AccessibilityEvent.obtain(AccessibilityEvent.TYPE_VIEW_TEXT_SELECTION_CHANGED)
+        val event = AccessibilityEvent.obtain(AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED)
         val manager =
             applicationContext.getSystemService(Context.ACCESSIBILITY_SERVICE) as AccessibilityManager
         if (manager.isEnabled) {
